@@ -109,6 +109,20 @@ $(function() {
 		 it('check feedcontent',function(done){
 			 expect(feedcontent).not.toBe($('.feed').html());
 			 done();
-		 });		 
+		 });		
 	});
+	
+	describe('Exception handle',function(){
+		/*TODO:实现未定义变量和数组越界的错误处理*/
+		it('Variables not defined',function(){
+			expect(function(){ return allFeed;}).toThrow();	
+		});
+		//not sure how to do
+		it('Indexs out of range',function(){
+			expect(function(){ return allFeeds[10];}).toThrow();
+		});		
+		
+	});
+	
+	
 }());
