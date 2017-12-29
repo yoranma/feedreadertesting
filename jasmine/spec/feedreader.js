@@ -84,15 +84,15 @@ $(function() {
          * 记住 loadFeed() 函数是异步的所以这个而是应该使用 Jasmine 的 beforeEach
          * 和异步的 done() 函数。
          */
-		 /*
+		 
 		 var feeddiv;
 		 beforeEach(function(done){
 			 feedcontent = $('.feed').html();
 			 for(var i=0;i<allFeeds.length;i++){
-				loadFeed(i,done);
+				loadFeed(1,done);
 			 }
 		 });
-		 */
+		
     });
     /* TODO: 写一个叫做 "New Feed Selection" 的测试用例 */
 	describe('New Feed Selection',function(){
