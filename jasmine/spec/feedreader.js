@@ -49,15 +49,17 @@ $(function() {
 	describe('The menu',function(){
 
 		var bodymenu;
+		var menuicon;
 		beforeEach(function(){
 			bodymenu = $('body');
+			menuicon = $('.menu-icon-link');
 		});
         /* TODO:
          * 写一个测试用例保证菜单元素默认是隐藏的。你需要分析 html 和 css
          * 来搞清楚我们是怎么实现隐藏/展示菜单元素的。
          */
 		 it('menu hide as default',function(){
-			 expect(bodymenu.hasClass('menu-hide1')).toBeTruthy();			 
+			 expect(bodymenu.hasClass('menu-hide')).toBeTruthy();			 
 		 });
 
          /* TODO:
@@ -66,7 +68,10 @@ $(function() {
           * 再次点击的时候是否隐藏。
           */
 		  it('menu click',function(){
-			  
+			  menuicon.trigger('click');
+			  expect(bodymenu.hasClass('menu-hide')).toBeFalsy();
+			  menuicon.trigger('click');
+			  expect(bodymenu.hasClass('menu-hide')).toBeTruthy();
 		  });
 	});
 	
@@ -79,6 +84,13 @@ $(function() {
          * 记住 loadFeed() 函数是异步的所以这个而是应该使用 Jasmine 的 beforeEach
          * 和异步的 done() 函数。
          */
+		 var feeddiv;
+		 beforeEach(function(done){
+			 feedcontent = $('.feed').html();
+			 for(var i=0;i<allFeeds.length;i++){
+				loadFeed(i,done);
+			 }
+		 });
     });
     /* TODO: 写一个叫做 "New Feed Selection" 的测试用例 */
 	describe('New Feed Selection',function(){
@@ -86,5 +98,15 @@ $(function() {
          * 写一个测试保证当用 loadFeed 函数加载一个新源的时候内容会真的改变。
          * 记住，loadFeed() 函数是异步的。
          */
+		  var feeddiv;
+		 beforeEach(function(done){
+			 feedcontent = $('.feed').html();
+			 loadFeed(3,done);
+		 });
+		 
+		 it('check feedcontent',function(done){
+			 expect(feedcontent).not.toBe($('.feed').html());
+			 done();
+		 });
 	});
 }());
