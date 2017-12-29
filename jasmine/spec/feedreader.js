@@ -100,7 +100,7 @@ $(function() {
          * 写一个测试保证当用 loadFeed 函数加载一个新源的时候内容会真的改变。
          * 记住，loadFeed() 函数是异步的。
          */
-		/* var feeddiv;
+		 var feeddiv;
 		 beforeEach(function(done){
 			 feedcontent = $('.feed').html();
 			 loadFeed(3,done);
@@ -109,7 +109,6 @@ $(function() {
 		 it('check feedcontent',function(done){
 			 expect(feedcontent).not.toBe($('.feed').html());
 			 done();
-		 });
-		 */
+		 });		 
 	});
 }());
