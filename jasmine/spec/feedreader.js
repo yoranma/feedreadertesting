@@ -21,14 +21,24 @@ $(function() {
             expect(allFeeds.length).not.toBe(0);
         });
 
+		function CheckItem(item,prop){
+			expect(item[prop]).toBeDefined();
+			expect(item[prop].length).not.toBe(0);
+			if(prop=='url')
+			{
+				// 检查 URL 格式是否正确的正规表达式
+				var regularExpressionUrl = /^((ht|f)tps?):\/\/([\w\-]+(\.[\w\-]+)*\/)*[\w\-]+(\.[\w\-]+)*\/?(\?([\w\-\.,@?^=%&:\/~\+#]*)+)?/; 
+				// 检查格式
+				expect(item[prop]).toMatch(regularExpressionUrl); 
+			}
+		}
 
         /* TODO:
          * 编写一个测试遍历 allFeeds 对象里面的所有的源来保证有链接字段而且链接不是空的。
          */
 		 it('url are not empty',function(){
 			allFeeds.forEach(function(item){
-				expect(item.url).toBeDefined();
-				expect(item.url.length).not.toBe(0);
+				CheckItem(item,'url');
 			});
 		 });
 
@@ -38,8 +48,7 @@ $(function() {
          */
 		 it('name are not empty',function(){
 			 allFeeds.forEach(function(item){
-				 expect(item.name).toBeDefined();
-				 expect(item.name.length).not.toBe(0);
+				 CheckItem(item,'name');
 			 });
 		 });
     });
@@ -59,7 +68,7 @@ $(function() {
          * 来搞清楚我们是怎么实现隐藏/展示菜单元素的。
          */
 		 it('menu hide as default',function(){
-			 expect(bodymenu.hasClass('menu-hidden')).toBeTruthy();			 
+			 expect(bodymenu.hasClass('menu-hidden')).toBe(true);			 
 		 });
 
          /* TODO:
@@ -69,9 +78,9 @@ $(function() {
           */
 		  it('menu click',function(){
 			  menuicon.trigger('click');
-			  expect(bodymenu.hasClass('menu-hidden')).toBeFalsy();
+			  expect(bodymenu.hasClass('menu-hidden')).toBe(false);
 			  menuicon.trigger('click');
-			  expect(bodymenu.hasClass('menu-hidden')).toBeTruthy();
+			  expect(bodymenu.hasClass('menu-hidden')).toBe(true);
 		  });
 	});
 	
@@ -85,12 +94,16 @@ $(function() {
          * 和异步的 done() 函数。
          */
 		 
-		 var feeddiv;
+		 var feedcontent;
 		 beforeEach(function(done){
-			 feedcontent = $('.feed').html();
-			 for(var i=0;i<allFeeds.length;i++){
-				loadFeed(1,done);
-			 }
+			 loadFeed(1,function(){
+				 feedcontent = $('.feed').html();
+				 done();
+			 });
+		 });
+		 
+		 it('Check Entries',function(){
+			expect(feedcontent).toBe($('.feed').html());			
 		 });
 		
     });
@@ -100,26 +113,30 @@ $(function() {
          * 写一个测试保证当用 loadFeed 函数加载一个新源的时候内容会真的改变。
          * 记住，loadFeed() 函数是异步的。
          */
-		 var feeddiv;
+		 var feedcontent1,feedcontent2;
 		 beforeEach(function(done){
-			 feedcontent = $('.feed').html();
-			 loadFeed(3,done);
+			 loadFeed(2,function(done){
+				feedcontent1 = $('.feed').html();
+				loadFeed(3,function(done){
+					feedcontent2 = $('.feed').html();
+					done();
+				});	
+			 });
 		 });
 		 
-		 it('check feedcontent',function(done){
-			 expect(feedcontent).not.toBe($('.feed').html());
-			 done();
+		 it('check feedcontent changed',function(done){
+			 expect(feedcontent1).not.toBe(feedcontent2);			 
 		 });		
 	});
 	
-	describe('Exception handle',function(){
+	xdescribe('Exception handle',function(){
 		/*TODO:实现未定义变量和数组越界的错误处理*/
-		it('Variables not defined',function(){
-			expect(function(){ return allFeed;}).toThrow();	
+		xit('Variables not defined',function(){
+			expect(allFeed).toBeUndefined();
 		});
 		//not sure how to do
 		it('Indexs out of range',function(){
-			expect(function(){ return allFeeds[10];}).toThrow();
+			expect(allFeeds.length).toBeLessThan(5);
 		});		
 		
 	});
